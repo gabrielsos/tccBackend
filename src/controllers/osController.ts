@@ -140,11 +140,7 @@ export default class OsController {
       loginName,
     });
 
-    console.log(equipmentSerialNumber.length);
-
     for (let i = 0; equipmentSerialNumber.length > i; i++) {
-      console.log('entrou');
-
       await db('equipmentOs').insert({
         equipmentSerialNumber: equipmentSerialNumber[i],
         osId: newOsId,

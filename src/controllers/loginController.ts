@@ -26,8 +26,6 @@ export default class LoginController {
     const { loginName, email, name } = request.body;
     const password = randomDigits();
 
-    console.log(loginName, email, name);
-
     await db('users').insert({
       loginName,
       name,
