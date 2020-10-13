@@ -30,7 +30,7 @@ routes.get('/equipment/local', equipmentController.indexId);
 routes.get('/local', localController.index);
 routes.get('/os', osController.index);
 routes.get('/profile', osController.indexId);
-routes.get('/profile/registers', osController.registersId);
+routes.get('/profile/registers/:id', osController.registersId);
 routes.get('/statistics', statisticsController.show);
 
 routes.post('/sessions', sessionController.create);
