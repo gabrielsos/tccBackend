@@ -1,16 +1,11 @@
 import { Request, Response } from 'express';
 import db from '../database/connection';
 
-interface ILocal {
-  localId: number;
-  localName: string;
-}
-
 export default class LocalController {
-  async index(request: Request, response: Response): Promise<ILocal[]> {
+  async index(request: Request, response: Response) {
     const local = await db('local').select('*');
 
-    return local;
+    return response.json(local);
   }
 
   async create(request: Request, response: Response) {

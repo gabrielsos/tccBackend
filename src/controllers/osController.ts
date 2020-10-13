@@ -75,12 +75,12 @@ export default class OsController {
       )
       .where('loginName', loginName)
       .groupBy('os.osId', 'os.osDateInit')
-      .orderBy('osStateName');
+      .orderBy('os.osDateInit', 'desc');
     return response.json(profile);
   }
 
   async registersId(request: Request, response: Response) {
-    const osId = request.headers.osregister;
+    const { id } = request.params;
 
     const osRegisters = await db('osRegisters')
       .join('users', 'osRegisters.loginName', '=', 'users.loginName')
@@ -90,8 +90,9 @@ export default class OsController {
         ),
         'users.name as name',
         'osRegisters.osRegisterDescription',
+        'osId',
       )
-      .where('osId', osId)
+      .where('osId', Number(id))
       .orderBy('osRegisterDate', 'desc');
     return response.json(osRegisters);
   }
