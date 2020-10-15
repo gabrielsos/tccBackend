@@ -121,9 +121,12 @@ export default class OsController {
   async create(request: Request, response: Response) {
     const osDateInit = currentDate();
 
-    const { osDescription, osTypeId, equipmentSerialNumber } = request.body;
-
-    const loginName = request.headers.authorization;
+    const {
+      osDescription,
+      osTypeId,
+      equipmentSerialNumber,
+      loginName,
+    } = request.body;
 
     const osId = await db('os').count('osId as id').first();
     let newOsId;
