@@ -33,6 +33,7 @@ routes.get('/profile', osController.indexId);
 routes.get('/profile/registers/:id', osController.registersId);
 routes.get('/statistics', statisticsController.show);
 routes.get('/osTypes', osTypeController.index);
+routes.get('/osStates', osStateController.index);
 
 routes.post('/sessions', sessionController.create);
 routes.post('/sessions/newPassword', loginController.newPassword);
