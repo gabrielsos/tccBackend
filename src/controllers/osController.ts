@@ -22,20 +22,26 @@ export default class OsController {
         'equipment.equipmentSerialNumber',
       )
       .join('local', 'equipment.localId', '=', 'local.localId')
+      .join('users', 'os.loginName', '=', 'users.loginName')
       .select(
+        'os.osId',
+        db.raw(`date_format(os.osDateInit, '%Y/%m/%d %T') as initDate`),
         db.raw(`date_format(os.osDateInit, '%d/%m/%Y %T') as rightInitDate`),
         'os.osDescription',
         db.raw(`date_format(os.osDateFinal, '%d/%m/%Y %T') as rightFinalDate`),
         'osType.typeName',
         'osState.osStateName',
         'local.localName',
+        'users.name',
         db.raw(`GROUP_CONCAT(??.?? separator ', ') as equip`, [
           'equipment',
           'equipmentName',
         ]),
       )
       .groupBy('os.osId', 'os.osDateInit')
-      .orderBy('osStateName');
+      .orderBy('osStateName')
+      .orderBy('os.osDateInit', 'desc')
+      .where('os.osStateId', '<>', 3);
 
     return response.json(os);
   }
@@ -62,6 +68,7 @@ export default class OsController {
       .join('local', 'equipment.localId', '=', 'local.localId')
       .select(
         'os.osId',
+        db.raw(`date_format(os.osDateInit, '%Y/%m/%d %T') as initDate`),
         db.raw(`date_format(os.osDateInit, '%d/%m/%Y %T') as rightInitDate`),
         'os.osDescription',
         db.raw(`date_format(os.osDateFinal, '%d/%m/%Y %T') as rightFinalDate`),
@@ -91,6 +98,7 @@ export default class OsController {
         'users.name as name',
         'osRegisters.osRegisterDescription',
         'osId',
+        'osRegisterDate',
       )
       .where('osId', Number(id))
       .orderBy('osRegisterDate', 'desc');
@@ -99,7 +107,13 @@ export default class OsController {
 
   async newRegister(request: Request, response: Response) {
     const osRegisterDate = currentDate();
-    const { osRegisterDescription, loginName, osId, osDateInit } = request.body;
+    const {
+      osRegisterDescription,
+      loginName,
+      osId,
+      osDateInit,
+      selectedOsState,
+    } = request.body;
 
     await db('osRegisters').insert({
       osId,
@@ -108,6 +122,18 @@ export default class OsController {
       loginName,
       osRegisterDescription,
     });
+
+    await db('os')
+      .update('osStateId', selectedOsState)
+      .where('osId', osId)
+      .where('osDateInit', osDateInit);
+
+    if (selectedOsState === '3') {
+      await db('os')
+        .update('osDateFinal', currentDate())
+        .where('osId', osId)
+        .where('osDateInit', osDateInit);
+    }
 
     return response.json({
       osDateInit,
