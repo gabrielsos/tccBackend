@@ -23,16 +23,16 @@ export default class LoginController {
   }
 
   async create(request: Request, response: Response) {
-    const { loginName, email, name } = request.body;
-    const password = randomDigits();
+    const { loginName, email, name, userType, password } = request.body;
 
     await db('users').insert({
       loginName,
       name,
       email,
       password,
+      userType,
     });
 
-    return response.json({ loginName, email, name });
+    return response.json({ loginName, email, name, userType });
   }
 }
