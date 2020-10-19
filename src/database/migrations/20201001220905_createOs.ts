@@ -5,7 +5,7 @@ export async function up(knex: Knex): Promise<void> {
     table.integer('osId').notNullable();
     table.dateTime('osDateInit').notNullable();
     table.string('osDescription').notNullable();
-    table.date('osDateFinal');
+    table.dateTime('osDateFinal');
     table.integer('osTypeId').notNullable();
     table.integer('osStateId').notNullable();
     table.string('loginName').notNullable();
