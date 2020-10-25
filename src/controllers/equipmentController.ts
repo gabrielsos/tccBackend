@@ -3,9 +3,25 @@ import db from '../database/connection';
 
 export default class equipmentController {
   async index(request: Request, response: Response) {
-    const equipment = await db('equipment').select('*');
+    const equipment = await db('equipment')
+      .select('*')
+      .join('local', 'equipment.localId', '=', 'local.localId');
 
     return response.json(equipment);
+  }
+
+  async delete(request: Request, response: Response) {
+    const { equipmentSerialNumber } = request.params;
+
+    try {
+      await db('equipment')
+        .delete('*')
+        .where('equipmentSerialNumber', '=', equipmentSerialNumber);
+
+      return response.json({ sucess: 'deleted' }).status(200);
+    } catch (err) {
+      return response.status(400).json(err);
+    }
   }
 
   async indexId(request: Request, response: Response) {

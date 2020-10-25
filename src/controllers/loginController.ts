@@ -1,11 +1,31 @@
 import { Request, Response } from 'express';
 import db from '../database/connection';
 
-import randomDigits from '../utils/crypto';
-
 export default class LoginController {
-  async index(request: Request, response: Response) {
-    const users = await db('users').select('*');
+  async indexAdmin(request: Request, response: Response) {
+    const users = await db('users')
+      .select('loginName', 'name', 'email', 'userType')
+      .where('userType', '=', '0');
+
+    return response.json(users);
+  }
+
+  async delete(request: Request, response: Response) {
+    const { loginName } = request.params;
+
+    try {
+      await db('users').delete('*').where('loginName', '=', loginName);
+
+      return response.json({ sucess: 'deleted' }).status(200);
+    } catch (err) {
+      return response.status(400).json(err);
+    }
+  }
+
+  async indexUsers(request: Request, response: Response) {
+    const users = await db('users')
+      .select('loginName', 'name', 'email', 'userType')
+      .where('userType', '<>', '0');
 
     return response.json(users);
   }

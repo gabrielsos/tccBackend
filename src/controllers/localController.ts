@@ -8,6 +8,18 @@ export default class LocalController {
     return response.json(local);
   }
 
+  async delete(request: Request, response: Response) {
+    const { localId } = request.params;
+
+    try {
+      await db('local').delete('*').where('localId', '=', localId);
+
+      return response.json({ sucess: 'deleted' }).status(200);
+    } catch (err) {
+      return response.status(400).json(err);
+    }
+  }
+
   async create(request: Request, response: Response) {
     const localId = await db('local').count('localId as id').first();
     let newLocalId;

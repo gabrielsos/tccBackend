@@ -7,6 +7,18 @@ export default class osStateController {
     return response.json(osState);
   }
 
+  async delete(request: Request, response: Response) {
+    const { osStateId } = request.params;
+
+    try {
+      await db('osState').delete('*').where('osStateId', '=', osStateId);
+
+      return response.json({ sucess: 'deleted' }).status(200);
+    } catch (err) {
+      return response.status(400).json(err);
+    }
+  }
+
   async create(request: Request, response: Response) {
     const osStateId = await db('osState').count('osStateId as id').first();
     let osState;

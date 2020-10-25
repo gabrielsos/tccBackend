@@ -7,6 +7,18 @@ export default class osTypeController {
     return response.json(osType);
   }
 
+  async delete(request: Request, response: Response) {
+    const { osTypeId } = request.params;
+
+    try {
+      await db('osType').delete('*').where('osTypeId', '=', osTypeId);
+
+      return response.json({ sucess: 'deleted' }).status(200);
+    } catch (err) {
+      return response.status(400).json(err);
+    }
+  }
+
   async create(request: Request, response: Response) {
     const osTypeId = await db('osType').count('osTypeId as id').first();
     let osType;

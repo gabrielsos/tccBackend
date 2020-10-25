@@ -24,11 +24,13 @@ const statisticsController = new StatisticsController();
 
 routes.post('/sendmail', emailController.forgotPassword);
 
-routes.get('/users', loginController.index);
+routes.get('/admin', loginController.indexAdmin);
+routes.get('/users', loginController.indexUsers);
 routes.get('/equipment', equipmentController.index);
 routes.get('/equipment/local', equipmentController.indexId);
 routes.get('/local', localController.index);
 routes.get('/os', osController.index);
+routes.get('/all-os', osController.show);
 routes.get('/profile', osController.indexId);
 routes.get('/profile/registers/:id', osController.registersId);
 routes.get('/statistics', statisticsController.show);
@@ -44,5 +46,11 @@ routes.post('/profile/newos', osController.create);
 routes.post('/os/register/new/', osController.newRegister);
 routes.post('/ostype/new', osTypeController.create);
 routes.post('/osstate/new', osStateController.create);
+
+routes.delete('/locals/:localId', localController.delete);
+routes.delete('/users/:loginName', loginController.delete);
+routes.delete('/ostype/:osTypeId', osTypeController.delete);
+routes.delete('/osstate/:osStateId', osStateController.delete);
+routes.delete('/equipment/:equipmentSerialNumber', equipmentController.delete);
 
 export default routes;
