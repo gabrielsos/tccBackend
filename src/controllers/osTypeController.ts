@@ -38,4 +38,18 @@ export default class osTypeController {
       return response.json(er);
     }
   }
+
+  async update(request: Request, response: Response) {
+    const { typeName, osTypeId } = request.body;
+
+    try {
+      await db('osType')
+        .update('typeName', typeName)
+        .where('osTypeId', '=', osTypeId);
+
+      return response.json({ sucess: 'updated' }).status(200);
+    } catch (err) {
+      return response.status(400).json(err);
+    }
+  }
 }

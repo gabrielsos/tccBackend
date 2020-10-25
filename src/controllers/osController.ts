@@ -41,7 +41,7 @@ export default class OsController {
       .groupBy('os.osId', 'os.osDateInit')
       .orderBy('osStateName')
       .orderBy('os.osDateInit', 'desc')
-      .where('os.osStateId', '<>', 3);
+      .where('os.osStateId', '<>', 2);
 
     return response.json(os);
   }

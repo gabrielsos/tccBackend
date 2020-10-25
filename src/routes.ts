@@ -27,7 +27,7 @@ routes.post('/sendmail', emailController.forgotPassword);
 routes.get('/admin', loginController.indexAdmin);
 routes.get('/users', loginController.indexUsers);
 routes.get('/equipment', equipmentController.index);
-routes.get('/equipment/local', equipmentController.indexId);
+routes.get('/equipment/local/:localId', equipmentController.indexId);
 routes.get('/local', localController.index);
 routes.get('/os', osController.index);
 routes.get('/all-os', osController.show);
@@ -52,5 +52,11 @@ routes.delete('/users/:loginName', loginController.delete);
 routes.delete('/ostype/:osTypeId', osTypeController.delete);
 routes.delete('/osstate/:osStateId', osStateController.delete);
 routes.delete('/equipment/:equipmentSerialNumber', equipmentController.delete);
+
+routes.put('/local', localController.update);
+routes.put('/equipment', equipmentController.update);
+routes.put('/users', loginController.update);
+routes.put('/ostype', osTypeController.update);
+routes.put('/osstate', osStateController.update);
 
 export default routes;

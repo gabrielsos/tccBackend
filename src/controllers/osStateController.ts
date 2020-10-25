@@ -39,4 +39,18 @@ export default class osStateController {
       return response.json(er);
     }
   }
+
+  async update(request: Request, response: Response) {
+    const { osStateName, osStateId } = request.body;
+
+    try {
+      await db('osState')
+        .update('osStateName', osStateName)
+        .where('osStateId', '=', osStateId);
+
+      return response.json({ sucess: 'updated' }).status(200);
+    } catch (err) {
+      return response.status(400).json(err);
+    }
+  }
 }

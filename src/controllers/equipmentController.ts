@@ -25,7 +25,9 @@ export default class equipmentController {
   }
 
   async indexId(request: Request, response: Response) {
-    const localId = request.headers.localid;
+    const { localId } = request.params;
+
+    console.log(localId);
 
     const equipment = await db('equipment')
       .select('equipmentName', 'equipmentSerialNumber', 'localId')
@@ -34,15 +36,45 @@ export default class equipmentController {
     return response.json(equipment);
   }
 
+  async indexSerial(request: Request, response: Response) {
+    const { equipmentSerial } = request.params;
+
+    const equipment = await db('equipment')
+      .select('equipmentName')
+      .where('localId', equipmentSerial);
+
+    return response.json(equipment);
+  }
+
   async create(request: Request, response: Response) {
     const { equipmentSerialNumber, equipmentName, localId } = request.body;
 
-    await db('equipment').insert({
-      equipmentSerialNumber,
-      equipmentName,
-      localId,
-    });
+    try {
+      await db('equipment').insert({
+        equipmentSerialNumber,
+        equipmentName,
+        localId,
+      });
+      return response
+        .status(201)
+        .json({ equipmentSerialNumber, equipmentName, localId });
+    } catch (err) {
+      return response.status(404).json(err);
+    }
+  }
 
-    return response.json({ equipmentSerialNumber, equipmentName, localId });
+  async update(request: Request, response: Response) {
+    const { equipmentSerialNumber, equipmentName, localId } = request.body;
+
+    try {
+      await db('equipment')
+        .update('equipmentName', equipmentName)
+        .update('localId', localId)
+        .where('equipmentSerialNumber', '=', equipmentSerialNumber);
+
+      return response.json({ sucess: 'updated' }).status(200);
+    } catch (err) {
+      return response.status(400).json(err);
+    }
   }
 }
