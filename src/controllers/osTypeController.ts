@@ -20,7 +20,7 @@ export default class osTypeController {
   }
 
   async create(request: Request, response: Response) {
-    const osTypeId = await db('osType').count('osTypeId as id').first();
+    const osTypeId = await db('osType').max('osTypeId as id').first();
     let osType;
 
     if (osTypeId) {

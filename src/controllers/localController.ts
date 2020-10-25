@@ -35,7 +35,7 @@ export default class LocalController {
   }
 
   async create(request: Request, response: Response) {
-    const localId = await db('local').count('localId as id').first();
+    const localId = await db('local').max('localId as id').first();
     const { localName } = request.body;
     let newLocalId;
 

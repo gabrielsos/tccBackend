@@ -20,7 +20,7 @@ export default class osStateController {
   }
 
   async create(request: Request, response: Response) {
-    const osStateId = await db('osState').count('osStateId as id').first();
+    const osStateId = await db('osState').max('osStateId as id').first();
     let osState;
 
     if (osStateId) {

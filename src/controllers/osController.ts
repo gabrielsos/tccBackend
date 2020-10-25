@@ -194,7 +194,7 @@ export default class OsController {
       loginName,
     } = request.body;
 
-    const osId = await db('os').count('osId as id').first();
+    const osId = await db('os').max('osId as id').first();
     let newOsId;
 
     if (osId) {
