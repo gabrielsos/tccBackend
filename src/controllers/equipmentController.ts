@@ -27,8 +27,6 @@ export default class equipmentController {
   async indexId(request: Request, response: Response) {
     const { localId } = request.params;
 
-    console.log(localId);
-
     const equipment = await db('equipment')
       .select('equipmentName', 'equipmentSerialNumber', 'localId')
       .where('localId', localId);
