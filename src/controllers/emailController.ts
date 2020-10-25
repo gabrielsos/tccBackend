@@ -36,9 +36,10 @@ Sua nova senha é: ${password}`,
       };
       transporter.sendMail(message, (error, info) => {
         if (error) {
-          return response.status(500).send('falhou');
+          console.log('falha no email');
+        } else {
+          console.log('email enviado');
         }
-        return response.status(200).send('enviou');
       });
       return response.json({ return: true });
     }
