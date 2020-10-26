@@ -202,7 +202,7 @@ var OsController = /** @class */ (function () {
                                 .where('osDateInit', osDateInit)];
                     case 2:
                         _b.sent();
-                        if (!(selectedOsState === '3')) return [3 /*break*/, 4];
+                        if (!(selectedOsState === '2')) return [3 /*break*/, 4];
                         return [4 /*yield*/, connection_1.default('os')
                                 .update('osDateFinal', currentDate_1.default())
                                 .where('osId', osId)
