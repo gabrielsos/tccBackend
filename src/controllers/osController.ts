@@ -212,7 +212,7 @@ export default class OsController {
       .where('osId', osId)
       .where('osDateInit', osDateInit);
 
-    if (selectedOsState === '3') {
+    if (selectedOsState === '2') {
       await db('os')
         .update('osDateFinal', currentDate())
         .where('osId', osId)
