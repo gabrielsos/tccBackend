@@ -31,6 +31,10 @@ routes.get('/equipment/local/:localId', equipmentController.indexId);
 routes.get('/local', localController.index);
 routes.get('/os', osController.index);
 routes.get('/all-os', osController.show);
+routes.get(
+  '/os-serial-number/:equipmentSerialNumber',
+  osController.getOsBySerialNumber,
+);
 routes.get('/profile', osController.indexId);
 routes.get('/profile/registers/:id', osController.registersId);
 routes.get('/statistics', statisticsController.show);

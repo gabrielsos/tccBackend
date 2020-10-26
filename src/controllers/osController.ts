@@ -46,6 +46,50 @@ export default class OsController {
     return response.json(os);
   }
 
+  async getOsBySerialNumber(request: Request, response: Response) {
+    const { equipmentSerialNumber } = request.params;
+
+    const os = await db('os')
+      .join('osType', 'os.osTypeId', '=', 'osType.osTypeId')
+      .join('osState', 'os.osStateId', '=', 'osState.osStateId')
+      .join('equipmentOs', function () {
+        this.on('os.osId', '=', 'equipmentOs.osId').andOn(
+          'os.osDateInit',
+          '=',
+          'equipmentOs.osDateInit',
+        );
+      })
+      .join(
+        'equipment',
+        'equipmentOs.equipmentSerialNumber',
+        '=',
+        'equipment.equipmentSerialNumber',
+      )
+      .join('local', 'equipment.localId', '=', 'local.localId')
+      .join('users', 'os.loginName', '=', 'users.loginName')
+      .select(
+        'os.osId',
+        db.raw(`date_format(os.osDateInit, '%Y/%m/%d %T') as initDate`),
+        db.raw(`date_format(os.osDateInit, '%d/%m/%Y %T') as rightInitDate`),
+        'os.osDescription',
+        db.raw(`date_format(os.osDateFinal, '%d/%m/%Y %T') as rightFinalDate`),
+        'osType.typeName',
+        'osState.osStateName',
+        'local.localName',
+        'users.name',
+        db.raw(`GROUP_CONCAT(??.?? separator ', ') as equip`, [
+          'equipment',
+          'equipmentName',
+        ]),
+      )
+      .groupBy('os.osId', 'os.osDateInit')
+      .orderBy('osStateName')
+      .orderBy('os.osDateInit', 'desc')
+      .where('equipmentOs.equipmentSerialNumber', '=', equipmentSerialNumber);
+
+    return response.json(os);
+  }
+
   async show(request: Request, response: Response) {
     const os = await db('os')
       .join('osType', 'os.osTypeId', '=', 'osType.osTypeId')
